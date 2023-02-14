@@ -30,12 +30,11 @@ class Camera:
         self.x, self.y = 0, 0
 
     def update(self, target):
-        delta_x = target.x + target.width // 2 - CAMERA_WIDTH // 2
-        delta_y = target.y + target.height // 2 - CAMERA_HEIGHT // 2
+        delta_x = (target.x + target.width // 2 - CAMERA_WIDTH // 2)
+        delta_y = (target.y + target.height // 2 - CAMERA_HEIGHT // 2)
 
         self.x += delta_x
         self.y += delta_y
-        # print(target.x - delta_x)
 
         for _object in all_gameObjects:
             _object.x -= delta_x
@@ -65,59 +64,67 @@ class WorldGenerator:
             При выходе за пределы поля, расширяет поле на один слой во все стороны
     """
     def __init__(self, _camera):
-        self.cells = [[[[PatternAidKid(0, 0), 0]]]]
-        self.patterns = [[[PatternPlatform(0, 0, WIDTH // 2 - 70, 50, [143, 188, 143],
-                                           ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 70, 0, WIDTH // 2 - 70, 50,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT - 50, WIDTH // 2 - 70, 50,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 70, HEIGHT - 50, WIDTH // 2 - 70, 50,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, 0, 50, HEIGHT // 2 - 100,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH - 50, 0, 50, HEIGHT // 2 - 100,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH - 50, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
-                                           [143, 188, 143], ['Wall'], ['Wall']), 1],
-                          [PatternEnemy1(WIDTH // 2 - 75, HEIGHT // 2 - 75, 50, 50), 0.9],
-                          [PatternEnemy2(WIDTH // 2 + 75, HEIGHT // 2 - 75, 50, 50, 8), 0.9],
-                          [PatternEnemy2(WIDTH // 2 - 75, HEIGHT // 2 + 75, 50, 50, 8), 0.9],
-                          [PatternEnemy1(WIDTH // 2 + 75, HEIGHT // 2 + 75, 50, 50), 0.9],
+        self.cells = [[[[PatternPlatform(0, 0, 50, 50, 'Left wall.png',
+                                           ['Wall'], ['Wall']), 0]]]]
+        self.patterns = [[[PatternPlatform(0, 0, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, 0, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(0, HEIGHT - 50, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT - 50, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(0, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(0, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH - 50, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH - 50, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternEnemy1(WIDTH // 2 - 75, HEIGHT // 2 - 75), 0.9],
+                          [PatternEnemy2(WIDTH // 2 + 75, HEIGHT // 2 - 75, 8), 0.9],
+                          [PatternEnemy2(WIDTH // 2 - 75, HEIGHT // 2 + 75, 8), 0.9],
+                          [PatternEnemy1(WIDTH // 2 + 75, HEIGHT // 2 + 75), 0.9],
                           [PatternAidKid(WIDTH // 2 - 25, HEIGHT // 2 - 25), 0.5],
                           [PatternAidKid(WIDTH // 2 + 25, HEIGHT // 2 - 25), 0.5],
                           [PatternAidKid(WIDTH // 2 - 25, HEIGHT // 2 + 25), 0.5],
                           [PatternAidKid(WIDTH // 2 + 25, HEIGHT // 2 + 25), 0.5]],
-                         [[PatternPlatform(WIDTH // 2 - 200, HEIGHT // 2 - 200, 200, 200, [143, 188, 143],
+                         [[PatternPlatform(WIDTH // 2 - 200, HEIGHT // 2 - 200, 200, 200, None,
                                            ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2, HEIGHT // 2, 200, 200, [143, 188, 143],
+                          [PatternPlatform(WIDTH // 2, HEIGHT // 2, 200, 200, None,
                                            ['Wall'], ['Wall']), 1],
-                          [PatternEnemy2(WIDTH // 2, HEIGHT // 2 - 150, 50, 50, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 + 100, HEIGHT // 2 - 50, 50, 50, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 - 150, HEIGHT // 2, 50, 50, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 - 50, HEIGHT // 2 + 100, 50, 50, 8), 1],
+                          [PatternEnemy2(WIDTH // 2, HEIGHT // 2 - 150, 8), 1],
+                          [PatternEnemy2(WIDTH // 2 + 100, HEIGHT // 2 - 50, 8), 1],
+                          [PatternEnemy2(WIDTH // 2 - 150, HEIGHT // 2, 8), 1],
+                          [PatternEnemy2(WIDTH // 2 - 50, HEIGHT // 2 + 100, 8), 1],
                           [PatternAidKid(WIDTH // 2, HEIGHT // 2 - 50), 0.8],
                           [PatternAidKid(WIDTH // 2, HEIGHT // 2 - 100), 0.8],
                           [PatternAidKid(WIDTH // 2 + 50, HEIGHT // 2 - 50), 0.8],
                           [PatternAidKid(WIDTH // 2 - 50, HEIGHT // 2), 0.8],
                           [PatternAidKid(WIDTH // 2 - 100, HEIGHT // 2), 0.8],
                           [PatternAidKid(WIDTH // 2 - 50, HEIGHT // 2 + 50), 0.8]],
-                         [[PatternSpikes(0, 0, 500, 250), 1],
-                          [PatternSpikes(500, 250, 500, 250), 1],
-                          [PatternSpikes(1000, 500, 500, 250), 1],
-                          [PatternSpikes(1500, 750, 500, 250), 1]],
-                         [[PatternSpikes(0, HEIGHT - 250, 500, 250), 1],
-                          [PatternSpikes(500, HEIGHT - 500, 500, 250), 1],
-                          [PatternSpikes(1000, HEIGHT - 750, 500, 250), 1],
-                          [PatternSpikes(1500, 750, 0, 250), 1]],
-                         [[PatternPlatform(0, 0, WIDTH, HEIGHT, [143, 188, 143],
-                                           ['Wall'], ['Wall']), 1]],
-                         [[PatternPlatform(0, HEIGHT // 2 - 150, WIDTH, 50, [143, 188, 143],
-                                           ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT // 2 + 100, WIDTH, 50, [143, 188, 143],
-                                           ['Wall'], ['Wall']), 1]]]
+                         [[PatternSpikes(0, 0, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(500, 250, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(1000, 500, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(1500, 750, 500, 250, 'Spike 500 250.png'), 1]],
+                         [[PatternSpikes(0, HEIGHT - 250, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(500, HEIGHT - 500, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(1000, HEIGHT - 750, 500, 250, 'Spike 500 250.png'), 1],
+                          [PatternSpikes(1500, 750, 0, 250, 'Spike 500 250.png'), 1]],
+                         [[PatternPlatform(0, 0, WIDTH, HEIGHT, None, ['Wall'], ['Wall']), 1]],
+                         [[PatternPlatform(0, HEIGHT // 2 - 150, WIDTH, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(0, HEIGHT // 2 + 100, WIDTH, 50, None, ['Wall'], ['Wall']), 1]],
+                         [[PatternPlatform(WIDTH // 2 - 150, 0, 50, HEIGHT, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, 0, 50, HEIGHT, None, ['Wall'], ['Wall']), 1]],
+                         [[PatternPlatform(0, HEIGHT // 2 - 150, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(0, HEIGHT // 2 + 100, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 - 150, WIDTH // 2 - 100, 50,
+                                           None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 + 100, WIDTH // 2 - 100, 50,
+                                           None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 - 150, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 - 150, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
+                                           None, ['Wall'], ['Wall']), 1],
+                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
+                                           None, ['Wall'], ['Wall']), 1]],
+                         [[PatternItemSpawner(WIDTH // 2 - 100, HEIGHT // 2 - 100), 1],
+                          [PatternItemSpawner(WIDTH // 2 - 100, HEIGHT // 2 + 75), 1],
+                          [PatternItemSpawner(WIDTH // 2 + 75, HEIGHT // 2 - 100), 1],
+                          [PatternItemSpawner(WIDTH // 2 + 75, HEIGHT // 2 + 75), 1]]]
 
         self.character_cell = [0, 0]
         self.camera = _camera
@@ -199,11 +206,20 @@ class Event:
     def __init__(self, **args):
         self.args = args
         self.calls = {}
+        self.new_calls = {}
 
     def set_call(self, _object):
-        if _object not in self.calls:
-            self.calls[_object] = 0
-        self.calls[_object] += 1
+        if _object not in self.new_calls:
+            self.new_calls[_object] = 0
+        self.new_calls[_object] += 1
+
+    def apply(self):
+        for call in self.new_calls:
+            if call not in self.calls:
+                self.calls[call] = 0
+            self.calls[call] += 1
+
+        self.new_calls = {}
 
 
 class GameObject:
@@ -230,10 +246,14 @@ class GameObject:
 
     Methods: None
     """
+    COLOR = [252, 247, 190]
+    FON_COLOR = [24, 28, 25]
+
     def __init__(self, x=0, y=0, width=0, height=0):
         global number_of_gameobjects
         self.x, self.y = x, y
         self.width, self.height = width, height
+        self.rect = pygame.Rect(self.x, self.y, width, height)
         self.collision = Collision(0, 0, width, height, self)
         self.tags = []
         self.id = number_of_gameobjects
@@ -245,7 +265,6 @@ class GameObject:
             return True
 
 
-# ------------------------------------------------------------------------------------
 class Collision(pygame.sprite.Sprite):
     """Имитирует collider объекта, неизменный прямоугольник,
      расположенный статично, относительно родительского объекта"""
@@ -341,17 +360,13 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         self.width, self.height = 50, 50
         GameObject.__init__(self, x, y, self.width, self.height)
-        self.image = pygame.Surface((self.width, self.height),
-                                    pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color("grey"),
-                         (0, 0, self.width, self.height))
+        self.image = load_image('Item spawner.png', GameObject.FON_COLOR)
 
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.tags = self.collision.tags = ['Item spawner', 'Indestructible']
+        self.tags = self.collision.tags = ['Item spawner']
 
-        self.items = [Nothing(), Accelerator(2), DamageBooster(5), Arsonist(5)]
+        self.items = [Nothing(), Accelerator(10), DamageBooster(30), Arsonist(15), BulletPyro(100)]
         self.item = random.choice(self.items)
-        self.time_between_receiving_items, = 1
+        self.time_between_receiving_items = 1
 
         self.was_purchase = False
 
@@ -359,12 +374,17 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
 
     def update(self, tick=0):
         all_inscriptions['Item ' + str(self.id)] = [self.font.render(f'Item: {self.item.name}',
-                                                                     True, "blue"), self.x + self.width // 2 -
-                                                    self.font.size(f'Item: {self.item.name}')[0] // 2, self.y - 40]
+                                                                     True, GameObject.COLOR), self.x + self.width // 2 -
+                                                    self.font.size(f'Item: {self.item.name}')[0] // 2, self.y - 40,
+                                                    self.font.size(f'Item: {self.item.name}')[0],
+                                                    self.font.size(f'Item: {self.item.name}')[1]]
         all_inscriptions['Price ' + str(self.id)] = [self.font.render(f'Price: {self.item.price}',
-                                                                      True, "blue"), self.x + self.width // 2 -
-                                                     self.font.size(f'Price: {self.item.price}')[0] // 2, self.y - 20]
-        if self.wait(self.tim, self.time_between_receiving_itemse):
+                                                                      True, GameObject.COLOR), self.x + self.width // 2 -
+                                                     self.font.size(f'Price: {self.item.price}')[0] // 2, self.y - 20,
+                                                     self.font.size('Price ' + str(self.id))[0],
+                                                     self.font.size('Price ' + str(self.id))[1]
+                                                     ]
+        if self.wait(self.time, self.time_between_receiving_items):
             self.collision.width, self.collision.height = self.width, self.height
         self.collision.update()
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -372,6 +392,36 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
     def wait(self, time, delay):
         if datetime.datetime.now() - time >= datetime.timedelta(seconds=delay):
             return True
+
+    def _kill(self):
+        self.collision.kill()
+        self.kill()
+
+
+class PatternItemSpawner:
+    """
+    Класс, создающий объект ItemSpawner
+
+    Attributes:
+        x: float
+            Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
+        y: float
+            Позиция объекта по оси ординат, если бы игрок находился по центру клетки, к которой располагается объект
+        width: float
+            Ширины объекта
+        height: float
+            Высота объекта
+
+    Methods:
+        init(delta_x, delta_y)
+            Создает объект Enemy1
+    """
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+
+    def init(self, delta_x, delta_y):
+        ItemSpawner(self.x + (CAMERA_WIDTH - WIDTH) // 2 - camera.x + WIDTH * delta_x,
+                    self.y + (CAMERA_HEIGHT - HEIGHT) // 2 - camera.y - HEIGHT * delta_y)
 
 
 class Enemy1(pygame.sprite.Sprite, GameObject):
@@ -420,12 +470,7 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
     def __init__(self, x, y, width, height):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
-        self.image = pygame.Surface((width, height),
-                                    pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color("grey"),
-                         (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
+        self.image = load_image('Turret 1.png', [24, 28, 25])
 
         self.tags = ['Enemy', 'Dangerous']
         self.collision.tags = ['Dangerous']
@@ -438,9 +483,10 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
         self.time_between_attack_on_character = 0.2
 
         self.font = pygame.font.Font(None, 30)
-        text = self.font.render(str(self.hp), True, 'red')
+        text = self.font.render(str(self.hp), True, [252, 247, 190])
         all_inscriptions[f'Enemy {self.id}'] = [text, self.x + (
-                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1]]
+                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1],
+                                                self.font.size(str(self.hp))[0], self.font.size(str(self.hp))[1]]
 
     def update(self, tick=0):
         for dangerous_object in self.collision.can_move_collisions(0, 0, ['Dangerous for enemy']):
@@ -452,9 +498,10 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             if 'One hit' in dangerous_object.gameObject.tags:
                 dangerous_object.gameObject._kill()
 
-        text = self.font.render(str(self.hp), True, 'red')
+        text = self.font.render(str(self.hp), True, [252, 247, 190])
         all_inscriptions[f'Enemy {self.id}'] = [text, self.x + (
-                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1]]
+                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1],
+                                                self.font.size(str(self.hp))[0], self.font.size(str(self.hp))[1]]
 
         if self.distance(character) < self.distance_of_attack and self.wait(self.time_attack,
                                                                             self.time_between_attack_on_character):
@@ -462,7 +509,8 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             c = (self.distance_x(character) * self.velocity_of_bullet / self.distance(character),
                  self.distance_y(character) * self.velocity_of_bullet / self.distance(character))
 
-            Bullet(self.x, self.y, 10, 10, c[0], c[1], 10, ['Dangerous', 'Indestructible', 'One hit'], ['Dangerous'])
+            Bullet(self.x + self.width // 2 - 5, self.y + self.height // 2 - 5, 10, 10,
+                   c[0], c[1], 10, ['Dangerous', 'Indestructible', 'One hit'], ['Dangerous'])
 
         self.collision.update()
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -471,13 +519,13 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             self._kill(True)
 
     def distance(self, target):
-        return math.sqrt((self.x - target.x) ** 2 + (self.y - target.y) ** 2)
+        return math.sqrt(self.distance_x(target) ** 2 + self.distance_y(target) ** 2)
 
     def distance_x(self, target):
-        return target.x - self.x
+        return target.x + target.width // 2 - (self.x + self.width // 2)
 
     def distance_y(self, target):
-        return target.y - self.y
+        return target.y + target.height // 2 - (self.y + self.height // 2)
 
     def _kill(self, forever=False):
         if forever:
@@ -516,9 +564,9 @@ class PatternEnemy1:
         init(delta_x, delta_y)
             Создает объект Enemy1
     """
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y):
         self.x, self.y = x, y
-        self.width, self.height = width, height
+        self.width, self.height = 50, 50
 
     def init(self, delta_x, delta_y):
         enemy = Enemy1(self.x + (CAMERA_WIDTH - WIDTH) // 2 - camera.x + WIDTH * delta_x,
@@ -574,12 +622,7 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
     def __init__(self, x, y, width, height, delta_velocity):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
-        self.image = pygame.Surface((width, height),
-                                    pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, [112, 128, 144],
-                         (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
+        self.image = load_image('Turret 2.png', [24, 28, 25])
 
         self.tags = ['Enemy', 'Dangerous']
         self.collision.tags = ['Dangerous']
@@ -591,9 +634,10 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
         self.time_attack = datetime.datetime.now()
 
         self.font = pygame.font.Font(None, 30)
-        text = self.font.render(str(self.hp), True, 'red')
+        text = self.font.render(str(self.hp), True, [252, 247, 190])
         all_inscriptions[f'Enemy {self.id}'] = [text, self.x + (
-                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1]]
+                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1],
+                                                self.font.size(str(self.hp))[0], self.font.size(str(self.hp))[1]]
 
     def update(self, tick=0):
         # print(self.collision.can_move_collisions())
@@ -606,17 +650,18 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
             if 'One hit' in dangerous_object.gameObject.tags:
                 dangerous_object.gameObject._kill()
 
-        text = self.font.render(str(self.hp), True, 'red')
+        text = self.font.render(str(self.hp), True, [252, 247, 190])
         all_inscriptions[f'Enemy {self.id}'] = [text, self.x + (
-                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1]]
+                self.width - self.font.size(str(self.hp))[0]) // 2, self.y - self.font.size(str(self.hp))[1],
+                                                self.font.size(str(self.hp))[0], self.font.size(str(self.hp))[1]]
 
         if self.distance(character) < self.distance_of_attack and self.wait(self.time_attack, 1):
             self.time_attack = datetime.datetime.now()
             c = (self.distance_x(character) * self.velocity_of_bullet / self.distance(character),
                  self.distance_y(character) * self.velocity_of_bullet / self.distance(character))
 
-            SuperBullet(character, self.x, self.y, 20, 20, c[0], c[1], self.delta_velocity,
-                        20, ['Dangerous', 'Indestructible', 'One hit'], ['Dangerous'])
+            SuperBullet(character, self.x + self.width // 2 - 10, self.y + self.height // 2 - 10, 20, 20, c[0], c[1],
+                        self.delta_velocity, 20, ['Dangerous', 'Indestructible', 'One hit'], ['Dangerous'])
 
         self.collision.update()
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -625,13 +670,13 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
             self._kill(True)
 
     def distance(self, target):
-        return math.sqrt((self.x - target.x) ** 2 + (self.y - target.y) ** 2)
+        return math.sqrt(self.distance_x(target) ** 2 + self.distance_y(target) ** 2)
 
     def distance_x(self, target):
-        return target.x - self.x
+        return target.x + target.width // 2 - (self.x + self.width // 2)
 
     def distance_y(self, target):
-        return target.y - self.y
+        return target.y + target.height // 2 - (self.y + self.height // 2)
 
     def _kill(self, forever=False):
         if forever:
@@ -670,9 +715,9 @@ class PatternEnemy2:
             init(delta_x, delta_y)
                 Создает объект Enemy2
         """
-    def __init__(self, x, y, width, height, delta_velocity):
+    def __init__(self, x, y, delta_velocity):
         self.x, self.y = x, y
-        self.width, self.height = width, height
+        self.width, self.height = 50, 50
         self.delta_velocity = delta_velocity
 
     def init(self, delta_x, delta_y):
@@ -704,23 +749,33 @@ class Gun:
     """
     def __init__(self, carrier):
         self.carrier = carrier
-        self.damage = 25
+        self.damage = 30
         self.time, self.time_between_attack = datetime.datetime.now(), 0.5
 
     def hit(self, direction):
         if not self.wait(self.time, self.time_between_attack):
             return None
 
+        w = self.carrier.x + self.carrier.width // 2
+        h = self.carrier.y + self.carrier.height // 2
+        velocity_x = velocity_y = 0
         if direction == 'right':
             velocity_x = 800
+            w = self.carrier.x + self.carrier.width + 5
         elif direction == 'left':
             velocity_x = -800
+            w = self.carrier.x - 10
+        elif direction == 'up':
+            velocity_y = -800
+            h = self.carrier.y - 10
+        elif direction == 'down':
+            velocity_y = 800
+            h = self.carrier.y + self.carrier.height + 5
         else:
             return None
 
-        Bullet(self.carrier.x + self.carrier.width // 2,
-                                   self.carrier.y + self.carrier.height // 2, 10, 10, velocity_x, 0, self.damage,
-                                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
+        Bullet(w, h, 10, 10, velocity_x, velocity_y, self.damage,
+               ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
 
         self.time = datetime.datetime.now()
 
@@ -749,16 +804,25 @@ class MachineGun(Gun):
         if not self.wait(self.time, self.time_between_attack):
             return None
 
+        w = self.carrier.x + self.carrier.width // 2
+        h = self.carrier.y + self.carrier.height // 2
+        velocity_x = velocity_y = 0
         if direction == 'right':
             velocity_x = 800
             w = self.carrier.x + self.carrier.width + 5
         elif direction == 'left':
             velocity_x = -800
             w = self.carrier.x - 10
+        elif direction == 'up':
+            velocity_y = -800
+            h = self.carrier.y - 10
+        elif direction == 'down':
+            velocity_y = 800
+            h = self.carrier.y + self.carrier.height + 5
         else:
             return None
 
-        Bullet(w, self.carrier.y + self.carrier.height // 2, 5, 5, velocity_x, 0, self.damage,
+        Bullet(w, h, 5, 5, velocity_x, velocity_y, self.damage,
                                    ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
 
         self.time = datetime.datetime.now()
@@ -784,16 +848,25 @@ class Rifle(Gun):
         if not self.wait(self.time, self.time_between_attack):
             return None
 
+        w = self.carrier.x + self.carrier.width // 2
+        h = self.carrier.y + self.carrier.height // 2
+        velocity_x = velocity_y = 0
         if direction == 'right':
             velocity_x = 2000
-            w = self.carrier.x + self.carrier.width // 2
+            w = self.carrier.x + self.carrier.width + 5
         elif direction == 'left':
             velocity_x = -2000
             w = self.carrier.x - 10
+        elif direction == 'up':
+            velocity_y = -2000
+            h = self.carrier.y - 10
+        elif direction == 'down':
+            velocity_y = 2000
+            h = self.carrier.y + self.carrier.height + 5
         else:
             return None
 
-        Bullet(w, self.carrier.y + self.carrier.height // 2, 7, 7, velocity_x, 0, self.damage,
+        Bullet(w, h, 7, 7, velocity_x, velocity_y, self.damage,
                                    ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
 
         self.time = datetime.datetime.now()
@@ -832,10 +905,8 @@ class Bullet(pygame.sprite.Sprite, GameObject):
         GameObject.__init__(self, x, y, width, height)
         self.image = pygame.Surface((width, height),
                                     pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color("orange"),
+        pygame.draw.rect(self.image, [252, 247, 190],
                          (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
 
         self.tags = tags
         self.tags.append('Bullet')
@@ -907,10 +978,8 @@ class SuperBullet(pygame.sprite.Sprite, GameObject):
         GameObject.__init__(self, x, y, width, height)
         self.image = pygame.Surface((width, height),
                                     pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color("orange"),
+        pygame.draw.rect(self.image, [252, 247, 190],
                          (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
 
         self.tags = tags
         self.tags.append('Bullet')
@@ -943,13 +1012,13 @@ class SuperBullet(pygame.sprite.Sprite, GameObject):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def distance(self, target):
-        return math.sqrt((self.x - target.x) ** 2 + (self.y - target.y) ** 2)
+        return math.sqrt(self.distance_x(target) ** 2 + self.distance_y(target) ** 2)
 
     def distance_x(self, target):
-        return target.x - self.x
+        return target.x + target.width // 2 - (self.x + self.width // 2)
 
     def distance_y(self, target):
-        return target.y - self.y
+        return target.y + target.height // 2 - (self.y + self.height // 2)
 
     def _kill(self):
         self.collision.kill()
@@ -997,10 +1066,8 @@ class InertBullet(pygame.sprite.Sprite, GameObject):
         GameObject.__init__(self, x, y, width, height)
         self.image = pygame.Surface((width, height),
                                     pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color("orange"),
+        pygame.draw.rect(self.image, [252, 247, 190],
                          (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
 
         self.tags = tags
         self.tags.append('Bullet')
@@ -1044,25 +1111,22 @@ class Character(pygame.sprite.Sprite, GameObject):
     def __init__(self, x, y, width, height, *groups):
         pygame.sprite.Sprite.__init__(self, groups)
         GameObject.__init__(self, x, y, width, height)
-        self.image = pygame.Surface([width, height])
-        pygame.draw.rect(self.image, pygame.Color("blue"),
-                         (0, 0, width, height))
+        self.image = load_image('Smile.png', [24, 28, 25])
 
         self.weapon = MachineGun(self)
 
-        self.rect = pygame.Rect(x, y, self.width, self.height)
         self.v = 500
 
         self.tags = ['Character', 'Indestructible']
-        self.hp = 10000
-        self.coins = 2
+        self.hp = 100
+        self.coins = 100000
         self.time, self.time_between_enemy_attack = datetime.datetime.now(), 0.5
 
-        self.items = [Accelerator(2), DamageBooster(5), BulletPyro(20), Nothing()]
+        self.items = [Accelerator(0), DamageBooster(0), BulletPyro(0), Shrapnel(0)]
         for item in self.items:
             item.init(self)
 
-        self.font = pygame.font.Font(None, 50)
+        self.font = pygame.font.Font(None, 35)
 
         # self.collision.width, self.collision.height = 0, 0
 
@@ -1070,15 +1134,22 @@ class Character(pygame.sprite.Sprite, GameObject):
         for item in self.items:
             item.update()
 
-        text = self.font.render(str(self.hp), True, "red")
-        all_inscriptions['Character'] = [text, 10, 10]
-        all_inscriptions["Character's coins"] = [self.font.render(f'Coins: {self.coins}', True, "red"), 10, 50]
-        all_inscriptions['FPS: '] = [self.font.render(f'FPS: {int(clock.get_fps())}', True, "red"),
-                                     CAMERA_WIDTH - 150, 10]
+        text = self.font.render('Hp: ' + str(self.hp), True, [252, 247, 190])
+        all_inscriptions['Character'] = [text, 10, 10, self.font.size('Hp: ' + str(self.hp))[0],
+                                         self.font.size('Hp: ' + str(self.hp))[1]]
+        all_inscriptions["Character's coins"] = [self.font.render(f'Coins: {self.coins}', True, [252, 247, 190]), 10, 50,
+                                                 self.font.size(f'Coins: {self.coins}')[0],
+                                                 self.font.size(f'Coins: {self.coins}')[1]]
+        all_inscriptions['FPS: '] = [self.font.render(f'FPS: {int(clock.get_fps())}', True, [252, 247, 190]),
+                                     CAMERA_WIDTH - 150, 10, self.font.size(f'FPS: {int(clock.get_fps())}')[0],
+                                     self.font.size(f'FPS: {int(clock.get_fps())}')[1]]
         for index in range(len(self.items)):
             self.items[index].update()
             all_inscriptions['Item ' + str(index)] = [self.font.render(
-                f'Item {index + 1}: {self.items[index].name}', True, "red"), 10, 90 + index * 40]
+                f'Item {index + 1}: {self.items[index].name}', True, [252, 247, 190]), 10,
+                90 + index * (self.font.size('I')[1]),
+                self.font.size(f'Item {index + 1}: {self.items[index].name}')[0],
+                self.font.size(f'Item {index + 1}: {self.items[index].name}')[1]]
 
         for _collision in self.collision.can_move_collisions():
             if 'Dangerous' in _collision.tags:
@@ -1093,6 +1164,14 @@ class Character(pygame.sprite.Sprite, GameObject):
                 self.hp += _collision.gameObject.adding_of_hp
                 _collision.gameObject._kill(True)
 
+            if 'Dangerous' in _collision.tags or 'AidKid' in _collision.gameObject.tags:
+                if self.hp >= 80:
+                    self.image = load_image('Smile hp 80.png')
+                elif self.hp >= 40:
+                    self.image = load_image('Smile hp 40.png')
+                elif self.hp >= 0:
+                    self.image = load_image('Smile hp 0.png')
+
             if 'Coin' in _collision.gameObject.tags:
                 self.coins += 1
                 _collision.gameObject._kill()
@@ -1105,8 +1184,9 @@ class Character(pygame.sprite.Sprite, GameObject):
                     self.items[-1].take_off()
                     _item = _collision.gameObject.item
                     _collision.gameObject.item = self.items[-1]
-                    self.items[-1] = self.items[-2]
-                    self.items[-2] = self.items[-3]
+                    for i in range(len(self.items) - 1, 0, -1):
+                        self.items[i] = self.items[i - 1]
+
                     self.items[0] = _item
                     self.items[0].init(self)
 
@@ -1148,9 +1228,11 @@ class Character(pygame.sprite.Sprite, GameObject):
 
         if self.hp <= 0:
             font = pygame.font.Font(None, 250)
-            text = font.render('Game over', True, [139, 0, 0])
+            text = font.render('Game over', True, [252, 247, 190])
+            all_inscriptions.clear()
             all_inscriptions['Game over'] = [text, (CAMERA_WIDTH - font.size(
-                'Game over')[0]) // 2, (CAMERA_HEIGHT - font.size('Game over')[1]) // 2]
+                'Game over')[0]) // 2, (CAMERA_HEIGHT - font.size('Game over')[1]) // 2,
+                                             font.size('Game over')[0], font.size('Game over')[1]]
 
             self.collision.kill()
             self.kill()
@@ -1166,25 +1248,24 @@ class Character(pygame.sprite.Sprite, GameObject):
 
 
 class Platform(pygame.sprite.Sprite, GameObject):
-    def __init__(self, x, y, width, height, color, tags_of_game_object=None, tags_of_collision=None):
+    def __init__(self, x, y, width, height, image, tags_of_game_object=None, tags_of_collision=None):
         if tags_of_game_object is None:
             tags_of_game_object = []
         if tags_of_collision is None:
             tags_of_collision = []
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
-        self.image = pygame.Surface((width, height),
-                                    pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, color,
-                         (0, 0, width, height))
-
-        self.rect = pygame.Rect(self.x, self.y, width, height)
+        if image is None:
+            self.image = pygame.Surface((width, height),
+                                        pygame.SRCALPHA, 32)
+            pygame.draw.rect(self.image, GameObject.COLOR,
+                             (0, 0, width, height))
+        else:
+            self.image = load_image(image, GameObject.FON_COLOR)
 
         self.tags = tags_of_game_object
         self.collision.tags = tags_of_collision
         self.damage = 10
-
-        self.color = color
 
     def update(self, tick=0):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -1219,7 +1300,7 @@ class PatternPlatform:
             init(delta_x, delta_y)
                 Создает объект Platform
         """
-    def __init__(self, x, y, width, height, color, tags_of_game_object=None, tags_of_collision=None):
+    def __init__(self, x, y, width, height, image, tags_of_game_object=None, tags_of_collision=None):
         if tags_of_game_object is None:
             tags_of_game_object = []
         if tags_of_collision is None:
@@ -1227,14 +1308,14 @@ class PatternPlatform:
 
         self.x, self.y = x, y
         self.width, self.height = width, height
-        self.color = color
-        self.tags_of_gameobject = tags_of_game_object
+        self.image = image
+        self.tags_of_game_object = tags_of_game_object
         self.tags_of_collision = tags_of_collision
 
     def init(self, delta_x=0, delta_y=0):
         Platform(self.x + (CAMERA_WIDTH - WIDTH) // 2 - camera.x + WIDTH * delta_x,
                  self.y + (CAMERA_HEIGHT - HEIGHT) // 2 - camera.y - HEIGHT * delta_y,
-                 self.width, self.height, self.color, self.tags_of_gameobject, self.tags_of_collision)
+                 self.width, self.height, self.image, self.tags_of_game_object, self.tags_of_collision)
 
 
 class AidKid(pygame.sprite.Sprite, GameObject):
@@ -1242,16 +1323,12 @@ class AidKid(pygame.sprite.Sprite, GameObject):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, 50, 50)
 
-        self.image = pygame.Surface((self.width, self.height),
-                                    pygame.SRCALPHA, 32)
-
-        pygame.draw.rect(self.image, 'yellow',
-                         (0, 0, self.width, self.height))
-
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.image = load_image('Aid kid.png', [24, 28, 25])
 
         self.adding_of_hp = 10
         self.tags = ['AidKid']
+
+        self.x_of_cell = self.y_of_cell = None
 
     def update(self, tick=0):
         self.collision.update()
@@ -1262,7 +1339,7 @@ class AidKid(pygame.sprite.Sprite, GameObject):
         self.kill()
 
     def _kill(self, forever=False):
-        if forever:
+        if forever and self.x_of_cell is not None and self.y_of_cell is not None:
             for index in range(len(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
                                    world_generator.character_cell[1] + self.y_of_cell])):
                 if type(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
@@ -1302,17 +1379,11 @@ class PatternAidKid:
 
 
 class Spikes(pygame.sprite.Sprite, GameObject):
-    def __init__(self, x, y, width, height, start_delay, delay_to_life, delay_to_death):
+    def __init__(self, x, y, width, height, image, start_delay, delay_to_life, delay_to_death):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
 
-        self.image = pygame.Surface((self.width, self.height),
-                                    pygame.SRCALPHA, 32)
-
-        pygame.draw.rect(self.image, 'red',
-                         (0, 0, self.width, self.height))
-
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.image = load_image(image, GameObject.FON_COLOR)
 
         self.damage = 10
 
@@ -1378,15 +1449,16 @@ class PatternSpikes:
             init(delta_x, delta_y)
                 Создает объект Spikes
         """
-    def __init__(self, x, y, width, height, start_delay=0, delay_to_life=0, delay_to_death=0):
+    def __init__(self, x, y, width, height, image, start_delay=0, delay_to_life=0, delay_to_death=0):
         self.x, self.y = x, y
         self.width, self.height = width, height
+        self.image = image
         self.start_delay, self.delay_to_life, self.delay_to_death = start_delay, delay_to_life, delay_to_death
 
     def init(self, delta_x, delta_y):
         Spikes(self.x + (CAMERA_WIDTH - WIDTH) // 2 - camera.x + WIDTH * delta_x,
                self.y + (CAMERA_HEIGHT - HEIGHT) // 2 - camera.y - HEIGHT * delta_y, self.width, self.height,
-               self.start_delay, self.delay_to_life, self.delay_to_death)
+               self.image, self.start_delay, self.delay_to_life, self.delay_to_death)
 
 
 class Coin(pygame.sprite.Sprite, GameObject):
@@ -1408,13 +1480,8 @@ class Coin(pygame.sprite.Sprite, GameObject):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, 10, 10)
 
-        self.image = pygame.Surface((self.width, self.height),
-                                    pygame.SRCALPHA, 32)
+        self.image = load_image('Coin.png', [24, 28, 25])
 
-        pygame.draw.rect(self.image, [255, 140, 0],
-                         (0, 0, self.width, self.height))
-
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.tags = ['Coin', 'Indestructible']
 
         self.time_of_live = 5
@@ -1422,8 +1489,7 @@ class Coin(pygame.sprite.Sprite, GameObject):
     def update(self, tick=0):
         self.collision.update()
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
-        if datetime.datetime.now().second - self.time.second > self.time_of_live:
+        if datetime.datetime.now() - self.time > datetime.timedelta(seconds=self.time_of_live):
             self._kill()
 
     def _kill(self):
@@ -1468,7 +1534,7 @@ class Accelerator(Item):
     def __init__(self, price):
         self.price = price
         self.name = 'Accelerator'
-        self.delta_velocity = 500
+        self.delta_velocity = 200
 
     def init(self, carrier):
         super().__init__(self.name, self.price, carrier)
@@ -1588,7 +1654,14 @@ class Shrapnel(Item):
         for i in range(len(EVENTS)):
             if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags']\
                     and self.carrier not in EVENTS[i].calls:
-                # Create 4 bullets
+                Bullet(EVENTS[i].args['x'] + 10, EVENTS[i].args['y'], 10, 10, 500, 0, 10,
+                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+                Bullet(EVENTS[i].args['x'] - 10, EVENTS[i].args['y'], 10, 10, -500, 0, 10,
+                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+                Bullet(EVENTS[i].args['x'], EVENTS[i].args['y'] + 10, 10, 10, 0, 500, 10,
+                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+                Bullet(EVENTS[i].args['x'], EVENTS[i].args['y'] - 10, 10, 10, 0, -500, 10,
+                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
                 EVENTS[i].set_call(self.carrier)
 
 
@@ -1611,16 +1684,11 @@ class Fire(pygame.sprite.Sprite, GameObject):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, 50, 50)
 
-        self.image = pygame.Surface((self.width, self.height),
-                                    pygame.SRCALPHA, 32)
+        self.image = load_image('Fire.png', [24, 28, 25])
 
-        pygame.draw.circle(self.image, [178, 34, 34],
-                           (self.width // 2, self.width // 2), self.width // 2)
-
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.tags = tags + ['Indestructible']
         self.collision.tags = tags
-        self.damage = 10
+        self.damage = 1
 
         self.time_of_life = time_of_life
 
@@ -1657,15 +1725,17 @@ def load_image(name, color_key=None):
 
 def print_inscriptions():
     for inscriptions in all_inscriptions.values():
+        pygame.draw.rect(screen, (24, 28, 25), (inscriptions[1], inscriptions[2],
+                                                inscriptions[3] - 1, inscriptions[4]))
         screen.blit(inscriptions[0], [inscriptions[1], inscriptions[2]])
 
 
-def load_fon(intro_text, fon):
-    screen.blit(fon, (0, 0))
+def load_fon(intro_text):
+    pass
     font = pygame.font.Font(None, 30)
     text_coord = 10
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('blue'))
+        string_rendered = font.render(line, 1, pygame.Color(GameObject.COLOR))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
@@ -1687,7 +1757,6 @@ SIZE = WIDTH, HEIGHT = 2000, 1000
 CAMERA_WIDTH, CAMERA_HEIGHT = 1000, 600
 screen = pygame.display.set_mode([CAMERA_WIDTH, CAMERA_HEIGHT])
 
-_fon = pygame.transform.scale(load_image('fon.png'), (CAMERA_WIDTH, CAMERA_HEIGHT))
 intro_text_1 = ["<Название проекта>", "",
                 "Нажмите Enter для начала игры",
                 "Нажмите Tab для просмотра статистики",
@@ -1717,16 +1786,46 @@ intro_text_3 = ["Правила:", "",
                 "   Для перемещения используйте WASD",
                 "   Для стрельбы используйте стрелочки",
                 "   Для того, чтобы сменить оружие нажимайте на tab",
-                "   В левом верхнем углу будет написано соатвшиеся здоровье и носимые предметы"
+                "   В левом верхнем углу будет написано соатвшиеся здоровье и носимые предметы",
                 "   Если ваше здоровье опустится до 0, вы проиграете", "",
                 "Нажмите Enter, чтобы начать игру",
                 "Нажмите Tab, чтобы посмотреть статистику",
                 "Нажмите Escape, чтобы выйти"]
-load_fon(intro_text_1, _fon)
+intro_text = intro_text_1
+load_fon(intro_text)
 
-pygame.display.flip()
+images = list(map(lambda x: load_image(x), ['Turret 1.png', 'Turret 2.png', 'Spike.png',
+                                            'Item spawner.png', 'Fire.png', 'Aid kid.png']))
+size_x = size_y = 50
+cells = [[None for j in range(CAMERA_WIDTH // size_x)] for i in range(CAMERA_HEIGHT // size_y)]
+cells[5][5] = cells[5][6] = cells[5][7] = cells[4][7] = cells[3][6] = random.choice(images)
+time = datetime.datetime.now()
 running = True
 while running:
+    if datetime.datetime.now() - time > datetime.timedelta(seconds=0.2):
+        time = datetime.datetime.now()
+        screen.fill(GameObject.FON_COLOR)
+        new_cells = [[j for j in i] for i in cells]
+        for i in range(len(cells)):
+            for j in range(len(cells[0])):
+                total = 0
+                a = [[-1, -1], [0, -1], [1, -1], [-1, -0], [1, 0], [-1, 1], [0, 1], [1, 1]]
+                for x, y in a:
+                    if cells[(i + x) % len(cells)][(j + y) % len(cells[0])]:
+                        total += 1
+                if cells[i][j] is None and total == 3:
+                    new_cells[i][j] = random.choice(images)
+                if cells[i][j] and not (total == 3 or total == 2):
+                    new_cells[i][j] = None
+        for y in range(len(new_cells)):
+            for x in range(len(new_cells[0])):
+                if new_cells[y][x]:
+                    screen.blit(new_cells[y][x], [x * size_x, y * size_y])
+
+        cells = [[j for j in i] for i in new_cells]
+        load_fon(intro_text)
+        pygame.display.flip()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -1737,12 +1836,14 @@ while running:
             con.close()
             sys.exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-            screen.fill('black')
-            load_fon(intro_text_2, _fon)
-            pygame.display.flip()
+            intro_text = intro_text_2
         if event.type == pygame.KEYDOWN and (event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL):
-            screen.fill('black')
-            load_fon(intro_text_3, _fon)
+            intro_text = intro_text_3
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            cells[event.pos[1] // size_y][event.pos[0] // size_x] = random.choice(images)
+            screen.blit(cells[event.pos[1] // size_y][event.pos[0] // size_x],
+                        [event.pos[0] // size_x * size_x, event.pos[1] // size_y * size_y])
             pygame.display.flip()
 
 all_gameObjects = pygame.sprite.Group()
@@ -1750,9 +1851,9 @@ all_collisions = pygame.sprite.Group()
 all_inscriptions = {}
 number_of_gameobjects = 0
 
-character = Character(CAMERA_WIDTH // 2 - 39, CAMERA_HEIGHT // 2 - 50, 78, 100, all_gameObjects)
-clock = pygame.time.Clock()
+character = Character(CAMERA_WIDTH // 2 - 39, CAMERA_HEIGHT // 2 - 50, 75, 75, all_gameObjects)
 camera = Camera()
+clock = pygame.time.Clock()
 world_generator = WorldGenerator(camera)
 EVENTS = []
 
@@ -1760,16 +1861,16 @@ weapons_of_character = [Gun, MachineGun, Rifle]
 
 running = True
 while running:
-    screen.fill('black')
+    screen.fill([24, 28, 25])
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            Platform(event.pos[0], event.pos[1], 50, 50, [255, 0, 0], ['Wall'], ['Wall'])
+            ItemSpawner(event.pos[0], event.pos[1])
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            Fire(event.pos[0], event.pos[1], 1, ['Dangerous for enemy'])
+            AidKid(event.pos[0], event.pos[1])
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
             EVENTS.append(Event(tags=['Weapon change', 'Character'], weapon=weapons_of_character[
@@ -1785,6 +1886,8 @@ while running:
 
     all_gameObjects.draw(screen)
     print_inscriptions()
+    for i in range(len(EVENTS)):
+        EVENTS[i].apply()
 
     pygame.display.flip()
 
