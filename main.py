@@ -1119,10 +1119,10 @@ class Character(pygame.sprite.Sprite, GameObject):
 
         self.tags = ['Character', 'Indestructible']
         self.hp = 100
-        self.coins = 100000
+        self.coins = 0
         self.time, self.time_between_enemy_attack = datetime.datetime.now(), 0.5
 
-        self.items = [Accelerator(0), DamageBooster(0), BulletPyro(0), Shrapnel(0)]
+        self.items = [Nothing(), Nothing(), Nothing()]
         for item in self.items:
             item.init(self)
 
