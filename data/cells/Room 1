@@ -1,0 +1,16 @@
+1|PatternPlatform|0|0|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|0|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|0|HEIGHT - 50|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|HEIGHT - 50|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|0|0|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|0|HEIGHT // 2 + 100|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|WIDTH - 50|0|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|WIDTH - 50|HEIGHT // 2 + 100|50|HEIGHT // 2 - 100|None|Wall|Wall
+0.9|PatternEnemy1|WIDTH // 2 - 75|HEIGHT // 2 - 75
+0.9|PatternEnemy2|WIDTH // 2 + 75|HEIGHT // 2 - 75|8
+0.9|PatternEnemy2|WIDTH // 2 - 75|HEIGHT // 2 + 75|8
+0.9|PatternEnemy1|WIDTH // 2 + 75|HEIGHT // 2 + 75
+0.5|PatternAidKid|WIDTH // 2 - 25|HEIGHT // 2 - 25
+0.5|PatternAidKid|WIDTH // 2 + 25|HEIGHT // 2 - 25
+0.5|PatternAidKid|WIDTH // 2 - 25|HEIGHT // 2 + 25
+0.5|PatternAidKid|WIDTH // 2 + 25|HEIGHT // 2 + 25

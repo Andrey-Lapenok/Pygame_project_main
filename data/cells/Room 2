@@ -1,0 +1,12 @@
+1|PatternPlatform|WIDTH // 2 - 200|HEIGHT // 2 - 200|200|200|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2|HEIGHT // 2|200|200|None|Wall|Wall
+0.9|PatternEnemy2|WIDTH // 2|HEIGHT // 2 - 150|8
+0.9|PatternEnemy2|WIDTH // 2 + 100|HEIGHT // 2 - 50|8
+0.9|PatternEnemy2|WIDTH // 2 - 150|HEIGHT // 2|8
+0.9|PatternEnemy2|WIDTH // 2 - 50|HEIGHT // 2 + 100|8
+0.8|PatternAidKid|WIDTH // 2|HEIGHT // 2 - 50
+0.8|PatternAidKid|WIDTH // 2|HEIGHT // 2 - 100
+0.8|PatternAidKid|WIDTH // 2 + 50|HEIGHT // 2 - 50
+0.8|PatternAidKid|WIDTH // 2 - 50|HEIGHT // 2
+0.8|PatternAidKid|WIDTH // 2 - 100|HEIGHT // 2
+0.8|PatternAidKid|WIDTH // 2 - 50|HEIGHT // 2 + 50

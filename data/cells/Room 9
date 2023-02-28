@@ -1,0 +1,4 @@
+0.5|PatternItemSpawner|WIDTH // 2 - 100|HEIGHT // 2 - 100
+0.5|PatternItemSpawner|WIDTH // 2 - 100|HEIGHT // 2 + 75
+0.5|PatternItemSpawner|WIDTH // 2 + 75|HEIGHT // 2 - 100
+0.5|PatternItemSpawner|WIDTH // 2 + 75|HEIGHT // 2 + 75

@@ -12,7 +12,6 @@ from collections import Counter
 class Camera:
     """
     Оцентровывает данный объект
-
     Attributes:
         x: float
             Позиция игрока по оси абсцисс относительно положения, занимаемого в начале прохождения,
@@ -20,12 +19,12 @@ class Camera:
         y: float
             Позиция игрока по оси ординат относительно положения, занимаемого в начале прохождения,
              не зависит от клетки, в которой находится target
-
     Methods:
         update(target)
             target - объект в чью систему отсчета войдет камера (объект, который будет по центру экрана)
             Перемещает все объекты так, чтобы target оказался по центру экрана
     """
+
     def __init__(self):
         self.x, self.y = 0, 0
 
@@ -44,7 +43,6 @@ class Camera:
 class WorldGenerator:
     """
     Класс WorldGenerator создает, отрисовывае и изменяет игровое поле
-
     Attributes:
          _camera: Camera
             Позиция игрока будет считаться с помощью этой камеры
@@ -55,7 +53,6 @@ class WorldGenerator:
             Список всех возможных видов клеток
         character_cell: list
             Показывает в какой клетке находится игрок
-
     Methods:
         new_cell():
             Уничтожает объекты, которые находятся вне клеток, которые окружают игрока
@@ -63,68 +60,26 @@ class WorldGenerator:
             Случайно выбирает новые паттерны для новых клеток (в которых раньше не бал игрок)
             При выходе за пределы поля, расширяет поле на один слой во все стороны
     """
+
     def __init__(self, _camera):
-        self.cells = [[[[PatternPlatform(0, 0, 50, 50, 'Left wall.png',
-                                           ['Wall'], ['Wall']), 0]]]]
-        self.patterns = [[[PatternPlatform(0, 0, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, 0, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT - 50, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT - 50, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH - 50, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH - 50, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternEnemy1(WIDTH // 2 - 75, HEIGHT // 2 - 75), 0.9],
-                          [PatternEnemy2(WIDTH // 2 + 75, HEIGHT // 2 - 75, 8), 0.9],
-                          [PatternEnemy2(WIDTH // 2 - 75, HEIGHT // 2 + 75, 8), 0.9],
-                          [PatternEnemy1(WIDTH // 2 + 75, HEIGHT // 2 + 75), 0.9],
-                          [PatternAidKid(WIDTH // 2 - 25, HEIGHT // 2 - 25), 0.5],
-                          [PatternAidKid(WIDTH // 2 + 25, HEIGHT // 2 - 25), 0.5],
-                          [PatternAidKid(WIDTH // 2 - 25, HEIGHT // 2 + 25), 0.5],
-                          [PatternAidKid(WIDTH // 2 + 25, HEIGHT // 2 + 25), 0.5]],
-                         [[PatternPlatform(WIDTH // 2 - 200, HEIGHT // 2 - 200, 200, 200, None,
-                                           ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2, HEIGHT // 2, 200, 200, None,
-                                           ['Wall'], ['Wall']), 1],
-                          [PatternEnemy2(WIDTH // 2, HEIGHT // 2 - 150, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 + 100, HEIGHT // 2 - 50, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 - 150, HEIGHT // 2, 8), 1],
-                          [PatternEnemy2(WIDTH // 2 - 50, HEIGHT // 2 + 100, 8), 1],
-                          [PatternAidKid(WIDTH // 2, HEIGHT // 2 - 50), 0.8],
-                          [PatternAidKid(WIDTH // 2, HEIGHT // 2 - 100), 0.8],
-                          [PatternAidKid(WIDTH // 2 + 50, HEIGHT // 2 - 50), 0.8],
-                          [PatternAidKid(WIDTH // 2 - 50, HEIGHT // 2), 0.8],
-                          [PatternAidKid(WIDTH // 2 - 100, HEIGHT // 2), 0.8],
-                          [PatternAidKid(WIDTH // 2 - 50, HEIGHT // 2 + 50), 0.8]],
-                         [[PatternSpikes(0, 0, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(500, 250, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(1000, 500, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(1500, 750, 500, 250, 'Spike 500 250.png'), 1]],
-                         [[PatternSpikes(0, HEIGHT - 250, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(500, HEIGHT - 500, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(1000, HEIGHT - 750, 500, 250, 'Spike 500 250.png'), 1],
-                          [PatternSpikes(1500, 750, 0, 250, 'Spike 500 250.png'), 1]],
-                         [[PatternPlatform(0, 0, WIDTH, HEIGHT, None, ['Wall'], ['Wall']), 1]],
-                         [[PatternPlatform(0, HEIGHT // 2 - 150, WIDTH, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT // 2 + 100, WIDTH, 50, None, ['Wall'], ['Wall']), 1]],
-                         [[PatternPlatform(WIDTH // 2 - 150, 0, 50, HEIGHT, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, 0, 50, HEIGHT, None, ['Wall'], ['Wall']), 1]],
-                         [[PatternPlatform(0, HEIGHT // 2 - 150, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(0, HEIGHT // 2 + 100, WIDTH // 2 - 100, 50, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 - 150, WIDTH // 2 - 100, 50,
-                                           None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 + 100, WIDTH // 2 - 100, 50,
-                                           None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 - 150, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, 0, 50, HEIGHT // 2 - 100, None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 - 150, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
-                                           None, ['Wall'], ['Wall']), 1],
-                          [PatternPlatform(WIDTH // 2 + 100, HEIGHT // 2 + 100, 50, HEIGHT // 2 - 100,
-                                           None, ['Wall'], ['Wall']), 1]],
-                         [[PatternItemSpawner(WIDTH // 2 - 100, HEIGHT // 2 - 100), 1],
-                          [PatternItemSpawner(WIDTH // 2 - 100, HEIGHT // 2 + 75), 1],
-                          [PatternItemSpawner(WIDTH // 2 + 75, HEIGHT // 2 - 100), 1],
-                          [PatternItemSpawner(WIDTH // 2 + 75, HEIGHT // 2 + 75), 1]]]
+        self.cells = [[[[PatternPlatform(300, 200, 500, 200, None,
+                                         ['Wall'], ['Wall']), 0]]]]
+        self.patterns = []
+        self.constants = {'WIDTH': WIDTH, 'HEIGHT': HEIGHT}
+        self.instruction_for_patterns = {'PatternPlatform': [PatternPlatform, float, float, float,
+                                                             float, [float], [str], [str]],
+                                         'PatternEnemy1': [PatternEnemy1, float, float],
+                                         'PatternEnemy2': [PatternEnemy2, float, float, float],
+                                         'PatternAidKid': [PatternAidKid, float, float],
+                                         'PatternSpikes': [PatternSpikes, float, float, float, float, str],
+                                         'PatternItemSpawner': [PatternItemSpawner, float, float]}
+
+        for file in os.listdir('data/cells'):
+            f = open('data/cells/' + file)
+            pattern = []
+            for _object in f.readlines():
+                pattern.append(self.read_cell(_object))
+            self.patterns.append(pattern)
 
         self.character_cell = [0, 0]
         self.camera = _camera
@@ -166,12 +121,12 @@ class WorldGenerator:
                 if not self.cells[self.character_cell[0] + index[0]][self.character_cell[1] + index[1]]:
                     pattern = random.choice(self.patterns)
                     for j in pattern:
-                        self.cells[self.character_cell[0] + index[0]][self.character_cell[1] + index[1]]\
+                        self.cells[self.character_cell[0] + index[0]][self.character_cell[1] + index[1]] \
                             .append(j.copy())
 
                 for j in range(len(self.cells[self.character_cell[0] + index[0]][self.character_cell[1] + index[1]])):
                     if random.random() < self.cells[self.character_cell[0] + index[0]][
-                                                    self.character_cell[1] + index[1]][j][1]:
+                            self.character_cell[1] + index[1]][j][1]:
                         self.cells[self.character_cell[0] + index[0]][
                             self.character_cell[1] + index[1]][j][0].init(index[0], index[1])
                         self.cells[self.character_cell[0] + index[0]][self.character_cell[1] + index[1]][j][1] = 1
@@ -191,22 +146,56 @@ class WorldGenerator:
 
             self.new_cell()
 
+    def read_arg(self, arg, pattern, n):
+        if arg == 'None':
+            return None
+
+        if pattern[n + 1] is float:
+            for constant in self.constants:
+                arg = arg.replace(constant, str(self.constants[constant]))
+            return eval(arg)
+
+        if pattern[n + 1] is str:
+            return arg
+
+        if type(pattern[n + 1]) == list:
+            arg = arg.split(',')
+            for i in range(len(arg)):
+                if arg[i] == 'None':
+                    arg[i] = None
+
+                elif pattern[n + 1][i % len(pattern[n + 1])] is int:
+                    for constant in self.constants:
+                        arg[i] = arg[i].replace(constant, str(self.constants[constant]))
+                    arg[i] = eval(arg[i])
+
+                elif pattern[n + 1][0] is str:
+                    pass
+
+            return arg
+
+    def read_cell(self, cell):
+        cell = cell.split('|')
+        return [self.instruction_for_patterns[cell[1]][0](*list(
+            self.read_arg(arg.strip(), self.instruction_for_patterns[cell[1]], i)
+            for i, arg in enumerate(cell[2:]))), float(cell[0])]
+
 
 class Event:
     """
     Event - событие, сохраняемое в  массив EVENTS,
      с помощью которого можно выявить некое действие, происходящее в ходе игры
-
      Attributes:
          args: dict
             Словарь всех свойств данного события
-
     Methods: None
     """
+
     def __init__(self, **args):
         self.args = args
         self.calls = {}
         self.new_calls = {}
+        self.time, self.max_time = 0, 5
 
     def set_call(self, _object):
         if _object not in self.new_calls:
@@ -220,12 +209,14 @@ class Event:
             self.calls[call] += 1
 
         self.new_calls = {}
+        self.time += 1
+        if self.time == self.max_time:
+            EVENTS.remove(self)
 
 
 class GameObject:
     """
     Базовый класс для всех объектов, расположенный на игровом поле, с которыми можно взаимодействовать
-
     Attributes:
         x: float
             Позиция левого верхнего угла объекта по оси абсцисс
@@ -243,7 +234,6 @@ class GameObject:
             Уникальный номер объекта
         time: datetime.datetime
             Время создания обьекта
-
     Methods: None
     """
     COLOR = [252, 247, 190]
@@ -264,10 +254,15 @@ class GameObject:
         if datetime.datetime.now() - time >= datetime.timedelta(seconds=delay):
             return True
 
+    def translate(self, delta_x, delta_y):
+        self.x += delta_x
+        self.y += delta_y
+
 
 class Collision(pygame.sprite.Sprite):
     """Имитирует collider объекта, неизменный прямоугольник,
      расположенный статично, относительно родительского объекта"""
+
     def __init__(self, x, y, width, height, game_object):
         pygame.sprite.Sprite.__init__(self, all_collisions)
         self.image = pygame.Surface((width, height),
@@ -295,7 +290,8 @@ class Collision(pygame.sprite.Sprite):
         ghost = Collision(self.x + delta_x, self.y + delta_y, self.width, self.height, self.gameObject)
         all_contacts = list(filter(lambda x: set(needed_tags_of_object).issubset(set(x.gameObject.tags)) and set(
             needed_tags_of_collision).issubset(set(x.tags)) and x is not self,
-                           pygame.sprite.spritecollide(ghost, all_collisions, False, pygame.sprite.collide_rect)))
+                                   pygame.sprite.spritecollide(ghost, all_collisions, False,
+                                                               pygame.sprite.collide_rect)))
         ghost.kill()
 
         return all_contacts
@@ -304,7 +300,6 @@ class Collision(pygame.sprite.Sprite):
 class Item:
     """
     Базовый класс для всех предметов, имеющих название, цену, носителя
-
     Attributes:
         name: str
             Название объекта
@@ -312,13 +307,13 @@ class Item:
             Цена обьекта
         carrier: GameObject
             Носитель объекта
-
     Methods:
         update()
             Срабатывает каждый кадр
         take_off()
             Срабатывает при снятии объекта
     """
+
     def __init__(self, name, price, carrier):
         self.name = name
         self.price = price
@@ -334,7 +329,6 @@ class Item:
 class ItemSpawner(pygame.sprite.Sprite, GameObject):
     """
     Объект, дающий возможность получать новые предметы
-
     Attributes:
         Атрибуты GameObject
         items: list
@@ -347,7 +341,6 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
             Время через которое можно передавать предметы в секундах
         was_purchase: bool
             Показывает, был ли куплен предмет item
-
     Methods:
         update(tick=0)
             Пишет над объектом предмет, хранящийся в данном объекте и цену предмета
@@ -356,6 +349,7 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
         wait(time, delay)
             Возаврыщает True, если с time прошло больше времени, чем delay
     """
+
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         self.width, self.height = 50, 50
@@ -379,7 +373,8 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
                                                     self.font.size(f'Item: {self.item.name}')[0],
                                                     self.font.size(f'Item: {self.item.name}')[1]]
         all_inscriptions['Price ' + str(self.id)] = [self.font.render(f'Price: {self.item.price}',
-                                                                      True, GameObject.COLOR), self.x + self.width // 2 -
+                                                                      True, GameObject.COLOR),
+                                                     self.x + self.width // 2 -
                                                      self.font.size(f'Price: {self.item.price}')[0] // 2, self.y - 20,
                                                      self.font.size('Price ' + str(self.id))[0],
                                                      self.font.size('Price ' + str(self.id))[1]
@@ -401,7 +396,6 @@ class ItemSpawner(pygame.sprite.Sprite, GameObject):
 class PatternItemSpawner:
     """
     Класс, создающий объект ItemSpawner
-
     Attributes:
         x: float
             Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
@@ -411,11 +405,11 @@ class PatternItemSpawner:
             Ширины объекта
         height: float
             Высота объекта
-
     Methods:
         init(delta_x, delta_y)
             Создает объект Enemy1
     """
+
     def __init__(self, x, y):
         self.x, self.y = x, y
 
@@ -427,7 +421,6 @@ class PatternItemSpawner:
 class Enemy1(pygame.sprite.Sprite, GameObject):
     """
     Класс врага, стреляющего часто слабыми пулями, летящими по прямой
-
     Attributes:
         Атрибуты GameObject
         hp: float
@@ -446,7 +439,6 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             Время последней атаки объекта
         time_between_attack_on_character: float
             Время между атаками объекта
-
     Methods:
         update(tick=0)
             Пишет над объектом оставшиеся здоровье
@@ -454,19 +446,17 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             по объекту наносится урон
             Если игрок в поле действия и прошло необходимое время, стреляет пулей Bullet в сторону игрока
             Если здоровье меньшу 1, уничтожает объект
-
         distance(target)
             Возвращает расстояние до target
-
         distance_x(target)
             Возвращает расстояние до target по оси абсцисс
-
         distance_y(target)
             Возвращает расстояние до target по оси ординат
         _kill(forever=False)
             Уничтожает объект,
             если forever равно True, то навсегда
     """
+
     def __init__(self, x, y, width, height):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
@@ -533,9 +523,9 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
             KILLS += 1
             Coin(self.x + self.width // 2 - 5, self.y + self.height // 2 - 5)
             for index in range(len(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                                   world_generator.character_cell[1] + self.y_of_cell])):
+                                       world_generator.character_cell[1] + self.y_of_cell])):
                 if type(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternEnemy1 and\
+                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternEnemy1 and \
                         world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
                             world_generator.character_cell[1] + self.y_of_cell][index][1] == 1:
                     world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
@@ -549,7 +539,6 @@ class Enemy1(pygame.sprite.Sprite, GameObject):
 class PatternEnemy1:
     """
     Класс, создающий объект Enemy1
-
     Attributes:
         x: float
             Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
@@ -559,11 +548,11 @@ class PatternEnemy1:
             Ширины объекта
         height: float
             Высота объекта
-
     Methods:
         init(delta_x, delta_y)
             Создает объект Enemy1
     """
+
     def __init__(self, x, y):
         self.x, self.y = x, y
         self.width, self.height = 50, 50
@@ -578,7 +567,6 @@ class PatternEnemy1:
 class Enemy2(pygame.sprite.Sprite, GameObject):
     """
         Класс врага, стреляющего иногда мощными пулями, способными к изменению траектории
-
         Attributes:
             Атрибуты GameObject
             hp: float
@@ -597,7 +585,6 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
                 Время последней атаки объекта
             time_between_attack_on_character: float
                 Время между атаками объекта
-
         Methods:
             update(tick=0)
                 Пишет над объектом оставшиеся здоровье
@@ -605,20 +592,17 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
                 по объекту наносится урон
                 Если игрок в поле действия и прошло необходимое время, стреляет пулей SuperBullet в сторону игрока
                 Если здоровье меньшу 1, уничтожает объект
-
             distance(target)
                 Возвращает расстояние до target
-
             distance_x(target)
                 Возвращает расстояние до target по оси абсцисс
-
             distance_y(target)
                 Возвращает расстояние до target по оси ординат
-
             _kill(forever=False)
                 Уничтожает объект,
                 если forever равно True, то навсегда
         """
+
     def __init__(self, x, y, width, height, delta_velocity):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, width, height)
@@ -684,9 +668,9 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
             KILLS += 1
             Coin(self.x + self.width // 2 - 5, self.y + self.height // 2 - 5)
             for index in range(len(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                                   world_generator.character_cell[1] + self.y_of_cell])):
+                                       world_generator.character_cell[1] + self.y_of_cell])):
                 if type(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternEnemy2 and\
+                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternEnemy2 and \
                         world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
                             world_generator.character_cell[1] + self.y_of_cell][index][1] == 1:
                     world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
@@ -700,7 +684,6 @@ class Enemy2(pygame.sprite.Sprite, GameObject):
 class PatternEnemy2:
     """
         Класс, создающий объект Enemy2
-
         Attributes:
             x: float
                 Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
@@ -710,11 +693,11 @@ class PatternEnemy2:
                 Ширины объекта
             height: float
                 Высота объекта
-
         Methods:
             init(delta_x, delta_y)
                 Создает объект Enemy2
         """
+
     def __init__(self, x, y, delta_velocity):
         self.x, self.y = x, y
         self.width, self.height = 50, 50
@@ -731,7 +714,6 @@ class PatternEnemy2:
 class Gun:
     """
     Класс пистолета, является родительсим для всех классов оружия
-
     Attributes:
         carrier: GameObject
             Носитель оружия
@@ -741,12 +723,12 @@ class Gun:
             Время последнего выстрела
         time_between_attack: float
             Время, которое должно пройти с предыдущего выстрела, чтобы сделать новый (в секундах)
-
     Methods:
         hit(direction)
             Если прошло необходимое врея с предыдущего выстрела,
              создает объект Bullet, летящий в одном из четырех направлений
     """
+
     def __init__(self, carrier):
         self.carrier = carrier
         self.damage = 30
@@ -787,14 +769,13 @@ class Gun:
 class MachineGun(Gun):
     """
     Класс автомата, стреляющего часто, но слабыми патронами
-
     Attributes:
         Атрибуты класса Gun
-
     Methods:
         hit(direction)
             То же что и метод hit класса Gun
     """
+
     def __init__(self, carrier):
         Gun.__init__(self, carrier)
         self.time_between_attack = 0.2
@@ -823,7 +804,7 @@ class MachineGun(Gun):
             return None
 
         Bullet(w, h, 5, 5, velocity_x, velocity_y, self.damage,
-                                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
+               ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
 
         self.time = datetime.datetime.now()
 
@@ -831,14 +812,13 @@ class MachineGun(Gun):
 class Rifle(Gun):
     """
         Класс винтовки, стреляющей редко, но сильными патронами
-
         Attributes:
             Атрибуты класса Gun
-
         Methods:
             hit(direction)
                 То же что и метод hit класса Gun
         """
+
     def __init__(self, carrier):
         Gun.__init__(self, carrier)
         self.time_between_attack = 1
@@ -867,7 +847,7 @@ class Rifle(Gun):
             return None
 
         Bullet(w, h, 7, 7, velocity_x, velocity_y, self.damage,
-                                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
+               ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'], self)
 
         self.time = datetime.datetime.now()
 
@@ -875,7 +855,6 @@ class Rifle(Gun):
 class Bullet(pygame.sprite.Sprite, GameObject):
     """
     Пуля, летящяя по прямой с константной скоростью
-
     Attributes:
         Аттрибуты класса GameObject
         velocity_x: float
@@ -886,7 +865,6 @@ class Bullet(pygame.sprite.Sprite, GameObject):
             Максимальное время, которое может существовать объект (в секундах)
         carrier_gun: GameObject
             Объект, носитель оружия, из которого был произведен выстрел данной пули
-
     Methods:
         update(tick=0)
             Если объект стелкнулся с коллизией с тегом Wall или
@@ -895,6 +873,7 @@ class Bullet(pygame.sprite.Sprite, GameObject):
         _kill()
             Уничтожает объект
     """
+
     def __init__(self, x=0, y=0, width=0, height=0, velocity_x=0, velocity_y=0, damage=0,
                  tags=None, tags_of_collision=None, carrier_gun=None):
         if tags is None:
@@ -939,7 +918,6 @@ class Bullet(pygame.sprite.Sprite, GameObject):
 class SuperBullet(pygame.sprite.Sprite, GameObject):
     """
         Пуля, изменяющая свое направление, но с константной скоростью
-
         Attributes:
             Аттрибуты класса GameObject
             velocity_x: float
@@ -956,7 +934,6 @@ class SuperBullet(pygame.sprite.Sprite, GameObject):
                 Объект, который направляется пуля
             delta_velocity: float
                 Длина вектор на который пуля меняет свою траекторию
-
         Methods:
             update(tick=0)
                 Если объект стелкнулся с коллизией с тегом Wall или
@@ -968,6 +945,7 @@ class SuperBullet(pygame.sprite.Sprite, GameObject):
             _kill()
                 Уничтожает объект
         """
+
     def __init__(self, target, x=0, y=0, width=0, height=0, velocity_x=0, velocity_y=0,
                  delta_velocity=0, damage=0, tags=None, tags_of_collision=None):
         if tags is None:
@@ -1028,7 +1006,6 @@ class SuperBullet(pygame.sprite.Sprite, GameObject):
 class InertBullet(pygame.sprite.Sprite, GameObject):
     """
             Пуля, изменяющая свое направление и с меняющееся скоростью
-
             Attributes:
                 Аттрибуты класса GameObject
                 velocity_x: float
@@ -1045,7 +1022,6 @@ class InertBullet(pygame.sprite.Sprite, GameObject):
                     Объект, который направляется пуля
                 delta_velocity: float
                     Длина вектор на который пуля меняет свою траекторию
-
             Methods:
                 update(tick=0)
                     Если объект стелкнулся с коллизией с тегом Wall или
@@ -1056,6 +1032,7 @@ class InertBullet(pygame.sprite.Sprite, GameObject):
                 _kill()
                     Уничтожает объект
             """
+
     def __init__(self, target, x=0, y=0, width=0, height=0, velocity_x=0, velocity_y=0,
                  delta_velocity=0, damage=0, tags=None, tags_of_collision=None):
         if tags is None:
@@ -1137,7 +1114,8 @@ class Character(pygame.sprite.Sprite, GameObject):
         text = self.font.render('Hp: ' + str(self.hp), True, [252, 247, 190])
         all_inscriptions['Character'] = [text, 10, 10, self.font.size('Hp: ' + str(self.hp))[0],
                                          self.font.size('Hp: ' + str(self.hp))[1]]
-        all_inscriptions["Character's coins"] = [self.font.render(f'Coins: {self.coins}', True, [252, 247, 190]), 10, 50,
+        all_inscriptions["Character's coins"] = [self.font.render(f'Coins: {self.coins}', True, [252, 247, 190]), 10,
+                                                 50,
                                                  self.font.size(f'Coins: {self.coins}')[0],
                                                  self.font.size(f'Coins: {self.coins}')[1]]
         all_inscriptions['FPS: '] = [self.font.render(f'FPS: {int(clock.get_fps())}', True, [252, 247, 190]),
@@ -1198,7 +1176,7 @@ class Character(pygame.sprite.Sprite, GameObject):
         all_pressed = pygame.key.get_pressed()
         global EVENTS
         for i in range(len(EVENTS)):
-            if 'Weapon change' in EVENTS[i].args['tags'] and\
+            if 'Weapon change' in EVENTS[i].args['tags'] and \
                     'Character' in EVENTS[i].args['tags'] and self not in EVENTS[i].calls:
                 self.weapon = EVENTS[i].args['weapon'](self)
                 EVENTS[i].set_call(self)
@@ -1213,7 +1191,8 @@ class Character(pygame.sprite.Sprite, GameObject):
         if all_pressed[pygame.K_d]:
             delta_x = self.v * tick
 
-        self.move(delta_x, delta_y)
+        self.move(delta_x, 0)
+        self.move(0, delta_y)
 
         if all_pressed[pygame.K_LEFT]:
             self.weapon.hit('left')
@@ -1241,10 +1220,7 @@ class Character(pygame.sprite.Sprite, GameObject):
 
     def move(self, delta_x, delta_y):
         if not self.collision.can_move_collisions(delta_x, delta_y, [], ['Wall']):
-            self.x += delta_x
-            self.y += delta_y
-
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+            GameObject.translate(self, delta_x, delta_y)
 
 
 class Platform(pygame.sprite.Sprite, GameObject):
@@ -1279,7 +1255,6 @@ class Platform(pygame.sprite.Sprite, GameObject):
 class PatternPlatform:
     """
         Класс, создающий объект Enemy1
-
         Attributes:
             x: float
                 Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
@@ -1295,17 +1270,16 @@ class PatternPlatform:
                 Список тегов объекта
             tags_of_collision: list
                 Список тегов коллизии объекта
-
         Methods:
             init(delta_x, delta_y)
                 Создает объект Platform
         """
+
     def __init__(self, x, y, width, height, image, tags_of_game_object=None, tags_of_collision=None):
         if tags_of_game_object is None:
             tags_of_game_object = []
         if tags_of_collision is None:
             tags_of_collision = []
-
         self.x, self.y = x, y
         self.width, self.height = width, height
         self.image = image
@@ -1341,9 +1315,9 @@ class AidKid(pygame.sprite.Sprite, GameObject):
     def _kill(self, forever=False):
         if forever and self.x_of_cell is not None and self.y_of_cell is not None:
             for index in range(len(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                                   world_generator.character_cell[1] + self.y_of_cell])):
+                                       world_generator.character_cell[1] + self.y_of_cell])):
                 if type(world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
-                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternAidKid and\
+                            world_generator.character_cell[1] + self.y_of_cell][index][0]) == PatternAidKid and \
                         world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
                             world_generator.character_cell[1] + self.y_of_cell][index][1] == 1:
                     world_generator.cells[world_generator.character_cell[0] + self.x_of_cell][
@@ -1357,17 +1331,16 @@ class AidKid(pygame.sprite.Sprite, GameObject):
 class PatternAidKid:
     """
         Класс, создающий объект Enemy1
-
         Attributes:
             x: float
                 Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
             y: float
                 Позиция объекта по оси ординат, если бы игрок находился по центру клетки, к которой располагается объект
-
         Methods:
             init(delta_x, delta_y)
                 Создает объект AidKid
         """
+
     def __init__(self, x, y):
         self.x, self.y = x, y
 
@@ -1428,7 +1401,6 @@ class Spikes(pygame.sprite.Sprite, GameObject):
 class PatternSpikes:
     """
         Класс, создающий объект Enemy1
-
         Attributes:
             x: float
                 Позиция объекта по оси абсцисс, если бы игрок находился по центру клетки, к которой располагается объект
@@ -1444,11 +1416,11 @@ class PatternSpikes:
                 Время, в течение которого объект выключен
             delay_to_death: float
                 Время, в течение которого объект включен
-
         Methods:
             init(delta_x, delta_y)
                 Создает объект Spikes
         """
+
     def __init__(self, x, y, width, height, image, start_delay=0, delay_to_life=0, delay_to_death=0):
         self.x, self.y = x, y
         self.width, self.height = width, height
@@ -1464,18 +1436,17 @@ class PatternSpikes:
 class Coin(pygame.sprite.Sprite, GameObject):
     """
     Класс монеты, дающей деньги на покупку прдметов
-
     Attributes:
         Атрибуты GameObject
         time_of_live: float
             Время, в течение которого объект существует
-
     Methods:
         update(tick=0)
             Уничтожает объект, если прошло с создания времени больше чем time_of_live
         kill()
             Уничтожает объект
     """
+
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, 10, 10)
@@ -1500,13 +1471,12 @@ class Coin(pygame.sprite.Sprite, GameObject):
 class Nothing(Item):
     """
     Класс отсутствия предмета
-
     Attributes:
         Атрибуты Item
-
     Methods:
         Методы Item
     """
+
     def __init__(self):
         self.price = 0
         self.name = 'Nothing'
@@ -1518,12 +1488,10 @@ class Nothing(Item):
 class Accelerator(Item):
     """
         Класс предмета, ускоряющего носителья
-
         Attributes:
             Атрибуты Item
             delta_velocity: float
                 Изменения скорости носителя
-
         Methods:
             Методы Item
             init(carrier)
@@ -1531,6 +1499,7 @@ class Accelerator(Item):
             take_off()
                 Вычитает из скорости носителя delta_velocity
         """
+
     def __init__(self, price):
         self.price = price
         self.name = 'Accelerator'
@@ -1547,12 +1516,10 @@ class Accelerator(Item):
 class DamageBooster(Item):
     """
         Класс предмета, увеличивающий урон
-
         Attributes:
             Атрибуты Item
             delta_damage: float
                 Изменение урона оружия носителя
-
         Methods:
             Методы Item
             update(carrier)
@@ -1560,6 +1527,7 @@ class DamageBooster(Item):
             take_off()
                 Вычитает delta_damage из урона оружия носителя
         """
+
     def __init__(self, price):
         self.price = price
         self.name = 'Damage booster'
@@ -1576,14 +1544,12 @@ class DamageBooster(Item):
 class Arsonist(Item):
     """
     Класс предмета, создающего Fire на месте игрока
-
     Attributes:
         Атрибуты Item
         time: deltatime.deltatime
             Время создания последего Fire
         delay: float
             Время, которое должно пройти с последнего создания Fire, чтобы создать Fire
-
     Methods:
         Методы Item
         update(carrier)
@@ -1591,6 +1557,7 @@ class Arsonist(Item):
         update()
             Если с последнего создания Fire прошло больше времени чем delay, создает Fire на месте носителя
     """
+
     def __init__(self, price):
         self.price = price
         self.name = "Arsonist"
@@ -1614,10 +1581,8 @@ class Arsonist(Item):
 class BulletPyro(Item):
     """
         Класс предмета, создающий Fire при уничтожении пули на координатах этой пули
-
         Attributes:
             Атрибуты Item
-
         Methods:
             Методы Item
             update(carrier)
@@ -1625,6 +1590,7 @@ class BulletPyro(Item):
             update()
                 Если пуля, выпущенная носителем уничтожается, создыет Fire на координатах пули
         """
+
     def __init__(self, price):
         self.price = price
         self.name = "BulletPyro"
@@ -1635,7 +1601,7 @@ class BulletPyro(Item):
     def update(self):
         global EVENTS
         for i in range(len(EVENTS)):
-            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags']\
+            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags'] \
                     and self.carrier not in EVENTS[i].calls:
                 Fire(EVENTS[i].args['x'] - 25, EVENTS[i].args['y'] - 25, 3, ['Dangerous for enemy'])
                 EVENTS[i].set_call(self.carrier)
@@ -1652,7 +1618,7 @@ class Shrapnel(Item):
     def update(self):
         global EVENTS
         for i in range(len(EVENTS)):
-            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags']\
+            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags'] \
                     and self.carrier not in EVENTS[i].calls:
                 Bullet(EVENTS[i].args['x'] + 10, EVENTS[i].args['y'], 10, 10, 500, 0, 10,
                        ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
@@ -1668,18 +1634,17 @@ class Shrapnel(Item):
 class Fire(pygame.sprite.Sprite, GameObject):
     """
     Круг огня
-
     Attributes:
         Атрибуты GameObject
         time_of_live: float
             Время, в течение котого объект существует
-
     Methods:
         update(tick=0)
             Уничтожает объект, если прошло время time_of_live
         _kill()
             Уничтожает объект
     """
+
     def __init__(self, x, y, time_of_life, tags):
         pygame.sprite.Sprite.__init__(self, all_gameObjects)
         GameObject.__init__(self, x, y, 50, 50)
@@ -1705,7 +1670,7 @@ class Fire(pygame.sprite.Sprite, GameObject):
 
 
 def load_image(name, color_key=None):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('data/images', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -1881,7 +1846,6 @@ while running:
     all_gameObjects.update(fps)
 
     camera.update(character)
-    # print(character.x)
     world_generator.update()
 
     all_gameObjects.draw(screen)

@@ -1,0 +1,8 @@
+1|PatternPlatform|0|HEIGHT // 2 - 150|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|0|HEIGHT // 2 + 100|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|HEIGHT // 2 - 150|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|HEIGHT // 2 + 100|WIDTH // 2 - 100|50|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 - 150|0|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|0|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 - 150|HEIGHT // 2 + 100|50|HEIGHT // 2 - 100|None|Wall|Wall
+1|PatternPlatform|WIDTH // 2 + 100|HEIGHT // 2 + 100|50|HEIGHT // 2 - 100|None|Wall|Wall
