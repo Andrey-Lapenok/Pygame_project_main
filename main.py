@@ -182,6 +182,33 @@ class WorldGenerator:
             for i, arg in enumerate(cell[2:]))), float(cell[0])]
 
 
+class EventController:
+    def __init__(self):
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+    def apply(self):
+        events_to_delete = []
+        for _event in self.events:
+            _event.apply()
+            if _event.time >= _event.max_time:
+                events_to_delete.append(_event)
+
+        for _event in events_to_delete:
+            self.events.remove(_event)
+
+    def get_events(self, needed_tags, _object):
+        events_to_return = []
+        for _event in self.events:
+            if all(map(lambda x: x in _event.args['tags'] and _object not in _event.calls, needed_tags)):
+                events_to_return.append(_event)
+                _event.set_call(_object)
+
+        return events_to_return
+
+
 class Event:
     """
     Event - событие, сохраняемое в  массив EVENTS,
@@ -211,11 +238,6 @@ class Event:
 
         self.new_calls = {}
         self.time += 1
-        event_to_delete = []
-        if self.time == self.max_time:
-            event_to_delete.append(self)
-        for _event in event_to_delete:
-            EVENTS.remove(_event)
 
 
 class GameObject:
@@ -914,10 +936,10 @@ class Bullet(pygame.sprite.Sprite, GameObject):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def _kill(self):
+        global event_controller
         if self.carrier_gun:
-            global EVENTS
-            EVENTS.append(Event(tags=['Bullet death', 'Bullet of character'],
-                                x=self.x + self.width // 2, y=self.y + self.height // 2))
+            event_controller.add_event(Event(tags=['Bullet death', 'Bullet of character'],
+                                             x=self.x + self.width // 2, y=self.y + self.height // 2))
         self.collision.kill()
         self.kill()
 
@@ -1106,7 +1128,7 @@ class Character(pygame.sprite.Sprite, GameObject):
         self.coins = 0
         self.time, self.time_between_enemy_attack = datetime.datetime.now(), 0.5
 
-        self.items = [Nothing(), Nothing(), Nothing()]
+        self.items = [BulletPyro(1), Nothing(), Nothing()]
         for item in self.items:
             item.init(self)
 
@@ -1181,12 +1203,8 @@ class Character(pygame.sprite.Sprite, GameObject):
                     _collision.gameObject.item.price = 0
 
         all_pressed = pygame.key.get_pressed()
-        global EVENTS
-        for i in range(len(EVENTS)):
-            if 'Weapon change' in EVENTS[i].args['tags'] and \
-                    'Character' in EVENTS[i].args['tags'] and self not in EVENTS[i].calls:
-                self.weapon = EVENTS[i].args['weapon'](self)
-                EVENTS[i].set_call(self)
+        for _event in event_controller.get_events(['Weapon change', 'Character'], self):
+            self.weapon = _event.args['weapon'](self)
 
         delta_x, delta_y = 0, 0
         if all_pressed[pygame.K_w]:
@@ -1607,11 +1625,8 @@ class BulletPyro(Item):
 
     def update(self):
         global EVENTS
-        for i in range(len(EVENTS)):
-            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags'] \
-                    and self.carrier not in EVENTS[i].calls:
-                Fire(EVENTS[i].args['x'] - 25, EVENTS[i].args['y'] - 25, 3, ['Dangerous for enemy'])
-                EVENTS[i].set_call(self.carrier)
+        for _event in event_controller.get_events(['Bullet death', 'Bullet of character'], self.carrier):
+            Fire(_event.args['x'] - 25, _event.args['y'] - 25, 3, ['Dangerous for enemy'])
 
 
 class Shrapnel(Item):
@@ -1624,18 +1639,15 @@ class Shrapnel(Item):
 
     def update(self):
         global EVENTS
-        for i in range(len(EVENTS)):
-            if 'Bullet death' in EVENTS[i].args['tags'] and 'Bullet of character' in EVENTS[i].args['tags'] \
-                    and self.carrier not in EVENTS[i].calls:
-                Bullet(EVENTS[i].args['x'] + 10, EVENTS[i].args['y'], 10, 10, 500, 0, 10,
-                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
-                Bullet(EVENTS[i].args['x'] - 10, EVENTS[i].args['y'], 10, 10, -500, 0, 10,
-                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
-                Bullet(EVENTS[i].args['x'], EVENTS[i].args['y'] + 10, 10, 10, 0, 500, 10,
-                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
-                Bullet(EVENTS[i].args['x'], EVENTS[i].args['y'] - 10, 10, 10, 0, -500, 10,
-                       ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
-                EVENTS[i].set_call(self.carrier)
+        for _event in event_controller.get_events(['Bullet death', 'Bullet of character'], self.carrier):
+            Bullet(_event.args['x'] + 10, _event.args['y'], 10, 10, 500, 0, 10,
+                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+            Bullet(_event.args['x'] - 10, _event.args['y'], 10, 10, -500, 0, 10,
+                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+            Bullet(_event.args['x'], _event.args['y'] + 10, 10, 10, 0, 500, 10,
+                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
+            Bullet(_event.args['x'], _event.args['y'] - 10, 10, 10, 0, -500, 10,
+                   ['Dangerous for enemy', 'Indestructible', 'One hit'], ['Dangerous for enemy'])
 
 
 class Fire(pygame.sprite.Sprite, GameObject):
@@ -1827,7 +1839,7 @@ character = Character(CAMERA_WIDTH // 2 - 39, CAMERA_HEIGHT // 2 - 50, 75, 75, a
 camera = Camera()
 clock = pygame.time.Clock()
 world_generator = WorldGenerator(camera)
-EVENTS = []
+event_controller = EventController()
 
 weapons_of_character = [Gun, MachineGun, Rifle]
 
@@ -1845,7 +1857,7 @@ while running:
             AidKid(event.pos[0], event.pos[1])
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-            EVENTS.append(Event(tags=['Weapon change', 'Character'], weapon=weapons_of_character[
+            event_controller.add_event(Event(tags=['Weapon change', 'Character'], weapon=weapons_of_character[
                 (weapons_of_character.index(type(character.weapon)) + 1) % len(weapons_of_character)]))
 
     fps = clock.tick() / 1000
@@ -1857,8 +1869,7 @@ while running:
 
     all_gameObjects.draw(screen)
     print_inscriptions()
-    for i in range(len(EVENTS)):
-        EVENTS[i].apply()
+    event_controller.apply()
 
     pygame.display.flip()
 
