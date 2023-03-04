@@ -38,6 +38,7 @@ class Camera:
         for _object in all_gameObjects:
             _object.x -= delta_x
             _object.y -= delta_y
+            _object.rect = pygame.Rect(_object.x, _object.y, _object.width, _object.height)
 
 
 class WorldGenerator:
@@ -210,8 +211,11 @@ class Event:
 
         self.new_calls = {}
         self.time += 1
+        event_to_delete = []
         if self.time == self.max_time:
-            EVENTS.remove(self)
+            event_to_delete.append(self)
+        for _event in event_to_delete:
+            EVENTS.remove(_event)
 
 
 class GameObject:
@@ -257,6 +261,9 @@ class GameObject:
     def translate(self, delta_x, delta_y):
         self.x += delta_x
         self.y += delta_y
+
+    def update(self):
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
 
 class Collision(pygame.sprite.Sprite):
